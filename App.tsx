@@ -1,20 +1,15 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+//import AppNavigator from "./src/navigation/AppNavigator";
+import React, { useState } from 'react';
+import { Routes } from './src/routes';
+import { LoginScreen } from './src/screens/Login';
+import { SignupScreen } from './src/screens/Signup';
 
 export default function App() {
+  const [isLogin, setIsLogin] = useState<Boolean>(true);
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <>
+      <Routes />
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
