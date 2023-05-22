@@ -1,24 +1,45 @@
-import React from 'react';
-import { TouchableOpacity, Text } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { Button } from 'react-native';
+import { Container, Title } from './styles'
+import { getUser } from '../../storage/user/getUser';
 
-type RootStackParamList = {
-  Login: undefined;
-  Signup: undefined;
-  Main: undefined;
-};
-
-type MainScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Main'>;
-
-interface MainScreenProps {
-  navigation: MainScreenNavigationProp;
+interface UserInfo {
+  name: string,
+  email: string,
+  password: string
 }
 
-export function MainScreen({ navigation }: MainScreenProps) {
+export function MainScreen() {
+  const navigation = useNavigation();
+  const [userInfo, setUserInfo] = useState<UserInfo>({ name: "", email: "", password: "" });
+  console.log("ola");
+
+  async function getStoredUser() {
+    const storedUser = await getUser();
+    if(storedUser === null) navigation.navigate('login');
+    else setUserInfo(storedUser);
+  };
+
+  // * useFocusEffect is better in this case cause we need to check locally for the user everytime this screen is on
+  // useEffect(() => {
+  //   getStoredUser();
+  // }, []);
+
+  useFocusEffect(useCallback(() => {
+    getStoredUser();
+  }, []));
+
+  function handleSubmit() {
+  }
+
   return (
-    <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
-      <Text>Logue-se</Text>
-    </TouchableOpacity>
+    <Container>
+
+      <Title>{`Logged user: ${userInfo.name}`}</Title>
+
+      <Button title={'Log out'} onPress={handleSubmit} />
+
+    </Container>
   );
 };
-

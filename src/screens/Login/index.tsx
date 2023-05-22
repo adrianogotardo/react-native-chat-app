@@ -8,13 +8,13 @@ export function LoginScreen() {
   const [password, setPassword] = useState<string>('');
   const navigation = useNavigation();
 
-  const handleToggleForm = () => {
-    navigation.navigate("signup");
-  };
+  function handleToggleForm() {
+    navigation.navigate('signup');
+  }
 
-  const handleSubmit = () => {
-
-  };
+  function handleSubmit() {
+    
+  }
 
   return (
     <Container>

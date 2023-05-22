@@ -7,8 +7,6 @@ export default function App() {
   // ! checar se há usuário
 
   return (
-    <>
       <Routes />
-    </>
   );
 }

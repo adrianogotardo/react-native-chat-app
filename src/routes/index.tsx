@@ -5,9 +5,9 @@ import { View } from 'react-native';
 export function Routes() {
     return(
         <View style={{flex: 1, backgroundColor: '#FFF'}}>
-        <NavigationContainer>
-            <AppRoutes />
-        </NavigationContainer>
+            <NavigationContainer>
+                <AppRoutes />
+            </NavigationContainer>
         </View>
     );
 }
