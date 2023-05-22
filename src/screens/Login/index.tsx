@@ -1,12 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { Text, View, TextInput, Button } from 'react-native';
-import { styles } from './styles'
-
-// interface Props {
-//   isLogin: Boolean,
-//   setIsLogin: React.Dispatch<React.SetStateAction<Boolean>>
-// }
+import { Button } from 'react-native';
+import { Container, StyledInput, Title, ToggleForm } from './styles'
 
 export function LoginScreen() {
   const [email, setEmail] = useState<string>('');
@@ -22,25 +17,29 @@ export function LoginScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Sign in</Text>
-      <TextInput
-        style={styles.input}
+    <Container>
+
+      <Title>Sign in</Title>
+
+      <StyledInput
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
       />
-      <TextInput
-        style={styles.input}
+
+      <StyledInput
         placeholder="Password"
         secureTextEntry
         value={password}
         onChangeText={setPassword}
       />
+
       <Button title={'Sign in'} onPress={handleSubmit} />
-      <Text style={styles.toggleForm} onPress={handleToggleForm}>
+
+      <ToggleForm onPress={handleToggleForm}>
         Doesn't have an account? Sign up!
-      </Text>
-    </View>
+      </ToggleForm>
+      
+    </Container>
   );
 };
