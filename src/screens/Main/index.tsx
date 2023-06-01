@@ -1,8 +1,10 @@
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import React, { useEffect, useState, useCallback } from 'react';
-import { Button } from 'react-native';
-import { Container, Title } from './styles'
+import React, { useState, useCallback } from 'react';
+import { Alert } from 'react-native';
+import { ButtonText, Container, StyledButton, Title } from './styles'
 import { getUser } from '../../storage/user/getUser';
+import { getToken } from '../../storage/token/getToken';
+import { deleteToken } from '../../storage/token/deleteToken';
 
 interface UserInfo {
   name: string,
@@ -13,32 +15,55 @@ interface UserInfo {
 export function MainScreen() {
   const navigation = useNavigation();
   const [userInfo, setUserInfo] = useState<UserInfo>({ name: "", email: "", password: "" });
-  console.log("ola");
+  const [token, setToken] = useState<string>('')
 
   async function getStoredUser() {
-    const storedUser = await getUser();
-    if(storedUser === null) navigation.navigate('login');
-    else setUserInfo(storedUser);
+    const storedToken = await getToken();
+    if(storedToken === null) {
+      Alert.alert(
+        'No token detected', 
+        'PLease, login so you can chat with your contacts :)', 
+        [{ 
+          text: 'OK', 
+          onPress: () => navigation.navigate('login') 
+        }], 
+        { cancelable: false }
+      );
+    }
+    else setToken(storedToken);
+    
+    // const storedUser = await getUser();
+    // if(storedUser === null) {
+    //   Alert.alert(
+    //     'No user detected', 
+    //     'PLease, login so you can chat with your contacts :)', 
+    //     [{ 
+    //       text: 'OK', 
+    //       onPress: () => navigation.navigate('login') 
+    //     }], 
+    //     { cancelable: false }
+    //   );
+    // }
+    // else setUserInfo(storedUser);
   };
-
-  // * useFocusEffect is better in this case cause we need to check locally for the user everytime this screen is on
-  // useEffect(() => {
-  //   getStoredUser();
-  // }, []);
 
   useFocusEffect(useCallback(() => {
     getStoredUser();
   }, []));
 
   function handleSubmit() {
+    deleteToken();
+    navigation.navigate('login')
   }
 
   return (
     <Container>
 
-      <Title>{`Logged user: ${userInfo.name}`}</Title>
+      <Title>{`Logged user: ${token}`}</Title>
 
-      <Button title={'Log out'} onPress={handleSubmit} />
+      <StyledButton onPress={handleSubmit}>
+        <ButtonText>Log out</ButtonText>
+      </StyledButton>
 
     </Container>
   );

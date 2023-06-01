@@ -1,7 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { Button } from 'react-native';
-import { Container, StyledInput, Title, ToggleForm } from './styles'
+import { Container, StyledInput, Title, ToggleForm, StyledButton, ButtonText } from './styles'
+import { api } from '../../services/api';
+import { AppError } from '../../utils/AppError';
+import { Alert } from 'react-native';
+import { createToken } from '../../storage/token/createToken';
 
 export function LoginScreen() {
   const [email, setEmail] = useState<string>('');
@@ -12,8 +15,18 @@ export function LoginScreen() {
     navigation.navigate('signup');
   }
 
-  function handleSubmit() {
-    
+  async function handleSubmit() {
+    try {
+      const response = await api.post('/signin', { email, password });
+      console.log(response.data);
+      createToken(response.data.token)
+      navigation.navigate('main');
+    } catch(error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError ? error.message : "Couldn't find the account. Please, try again later.";
+      console.log(title);
+      Alert.alert(title);
+    }
   }
 
   return (
@@ -26,7 +39,7 @@ export function LoginScreen() {
         value={email}
         onChangeText={setEmail}
       />
-
+      
       <StyledInput
         placeholder="Password"
         secureTextEntry
@@ -34,7 +47,9 @@ export function LoginScreen() {
         onChangeText={setPassword}
       />
 
-      <Button title={'Sign in'} onPress={handleSubmit} />
+      <StyledButton onPress={handleSubmit}>
+        <ButtonText>Sign in</ButtonText>
+      </StyledButton>
 
       <ToggleForm onPress={handleToggleForm}>
         Doesn't have an account? Sign up!

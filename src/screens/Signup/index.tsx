@@ -1,11 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { Alert, Button } from 'react-native';
-import { Container, StyledInput, Title, ToggleForm } from './styles'
+import { Alert } from 'react-native';
+import { ButtonText, Container, StyledButton, StyledInput, Title, ToggleForm } from './styles'
 import { api } from '../../services/api';
-import axios from 'axios';
 import { AppError } from '../../utils/AppError';
-import { useToast } from 'native-base';
 
 export function SignupScreen() {
   const [name, setName] = useState<string>('');
@@ -14,7 +12,6 @@ export function SignupScreen() {
   const [confirmPassword, setConfirmPassword] = useState<string>('');
 
   const navigation = useNavigation();
-  const toast = useToast();
 
   function handleToggleForm() {
     navigation.navigate('login');
@@ -24,16 +21,11 @@ export function SignupScreen() {
     try {
       const response = await api.post('/signup', { name, email, password });
       console.log(response.data);
+      navigation.navigate('login');
     } catch(error) {
       const isAppError = error instanceof AppError;
       const title = isAppError ? error.message : "Couldn't create the account. Please, try again later.";
       console.log(title);
-      // ! cannot make any toast error work... let's just use alert for now
-      toast.show({
-        title,
-        placement: 'top',
-        bgColor: 'red.500',
-      });
       Alert.alert(title);
     }
   };
@@ -69,7 +61,9 @@ export function SignupScreen() {
         onChangeText={setConfirmPassword}
       />
 
-      <Button title={'Sign up'} onPress={handleSubmit} />
+      <StyledButton onPress={handleSubmit}>
+        <ButtonText>Sign in</ButtonText>
+      </StyledButton>
 
       <ToggleForm onPress={handleToggleForm}>
         Already have an account? Sign in!

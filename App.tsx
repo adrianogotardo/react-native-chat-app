@@ -1,12 +1,14 @@
-//import AppNavigator from "./src/navigation/AppNavigator";
-import React, { useState } from 'react';
+import React from 'react';
 import { Routes } from './src/routes';
+import { AuthContextProvider } from './src/contexts/AuthContext';
 
 export default function App() {
-  const [isLogin, setIsLogin] = useState<Boolean>(true);
+
   // ! checar se há usuário
 
   return (
+    <AuthContextProvider>
       <Routes />
+    </AuthContextProvider>
   );
 }
